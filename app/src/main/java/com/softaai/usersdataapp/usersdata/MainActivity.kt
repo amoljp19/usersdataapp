@@ -1,7 +1,8 @@
-package com.softaai.usersdataapp
+package com.softaai.usersdataapp.usersdata
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.softaai.usersdataapp.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
