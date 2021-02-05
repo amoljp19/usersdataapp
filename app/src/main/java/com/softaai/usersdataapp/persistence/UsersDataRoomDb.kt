@@ -14,40 +14,19 @@ abstract class UsersDataRoomDb : RoomDatabase() {
 
     abstract fun usersDataDao(): UsersDataApiResponseDao
 
-    private class UsersDatabaseCallback(
-            private val scope: CoroutineScope
-    ) : RoomDatabase.Callback() {
-
-        override fun onCreate(db: SupportSQLiteDatabase) {
-            super.onCreate(db)
-            INSTANCE?.let { database ->
-                scope.launch {
-                    val usersDao = database.usersDataDao()
-
-                    usersDao.deleteAll()
-
-
-                    val data = Data("", "", "Amol", 1,"Pawar")
-                    usersDao.insert(data)
-                }
-            }
-        }
-    }
-
     companion object {
 
         @Volatile
         private var INSTANCE: UsersDataRoomDb? = null
 
-        fun getUsersDatabase(context: Context, scope: CoroutineScope): UsersDataRoomDb {
+        fun getUsersDatabase(context: Context): UsersDataRoomDb {
 
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     UsersDataRoomDb::class.java,
                     "users_database"
-                ).addCallback(UsersDatabaseCallback(scope))
-                        .build()
+                ).build()
                 INSTANCE = instance
 
                 instance

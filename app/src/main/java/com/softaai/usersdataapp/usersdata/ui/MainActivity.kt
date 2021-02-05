@@ -14,7 +14,10 @@ import com.softaai.usersdataapp.R
 import com.softaai.usersdataapp.model.Data
 import com.softaai.usersdataapp.usersdata.adapter.UsersListAdapter
 import com.softaai.usersdataapp.usersdata.viewmodel.UsersDataViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.lifecycle.HiltViewModel
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private val usersDataViewModel : UsersDataViewModel by viewModels()
