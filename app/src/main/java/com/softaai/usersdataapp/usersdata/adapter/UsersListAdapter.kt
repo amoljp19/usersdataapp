@@ -22,10 +22,10 @@ class UsersListAdapter : ListAdapter<Data, UsersListAdapter.UsersDataViewHolder>
     }
 
     class UsersDataViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val wordItemView: TextView = itemView.findViewById(R.id.textView)
+        private val userFirstNameItemView: TextView = itemView.findViewById(R.id.textView)
 
         fun bind(text: String?) {
-            wordItemView.text = text
+            userFirstNameItemView.text = text
         }
 
         companion object {

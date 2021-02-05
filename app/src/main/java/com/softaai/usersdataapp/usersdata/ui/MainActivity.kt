@@ -1,4 +1,4 @@
-package com.softaai.usersdataapp.usersdata
+package com.softaai.usersdataapp.usersdata.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
