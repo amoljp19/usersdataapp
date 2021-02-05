@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        usersDataViewModel.allUsers.observe(this, Observer { users ->
+        usersDataViewModel.UsersDataListLiveData.observe(this, Observer { users ->
             users?.let { adapter.submitList(it) }
         })
 
@@ -49,8 +49,8 @@ class MainActivity : AppCompatActivity() {
 
         if (requestCode == newUserDataActivityRequestCode && resultCode == Activity.RESULT_OK) {
             data?.getStringExtra(NewUserDataActivity.EXTRA_REPLY)?.let {
-                val user = Data(it, "", "", 1, "")
-                usersDataViewModel.insert(user)
+                val user = Data(it, "amol@gmail.com", "Amol", 1, "Pawar")
+                usersDataViewModel.insert(listOf(user))
             }
         } else {
             Toast.makeText(

@@ -14,7 +14,7 @@ interface UsersDataApiResponseDao {
     fun getAlphabetizedUsersData(): Flow<List<Data>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(data: Data)
+    suspend fun insert(data: List<Data>)
 
     @Query("DELETE FROM Data")
     suspend fun deleteAll()

@@ -1,23 +1,37 @@
 package com.softaai.usersdataapp.usersdata.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.annotation.WorkerThread
+import androidx.lifecycle.*
 import com.softaai.usersdataapp.model.Data
-import com.softaai.usersdataapp.network.UsersDataApiClient
 import com.softaai.usersdataapp.repository.UsersDataRepository
+import com.softaai.usersdataapp.usersdata.viewmodel.base.LiveCoroutinesViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class UsersDataViewModel @Inject constructor(private val usersDataApiClient: UsersDataApiClient, private val usersDataRepository: UsersDataRepository) : ViewModel() {
+class UsersDataViewModel @Inject constructor(private val usersDataRepository: UsersDataRepository) : LiveCoroutinesViewModel() {
 
-    val allUsers: LiveData<List<Data>> = usersDataRepository.allUsers.asLiveData()
+    private var usersDataFetchingLiveData: MutableLiveData<Boolean> = MutableLiveData()
+    val UsersDataListLiveData: LiveData<List<Data>>
 
+    val toastLiveData: MutableLiveData<String> = MutableLiveData()
 
-    fun insert(data: Data) = viewModelScope.launch {
+    init {
+
+        this.UsersDataListLiveData = this.usersDataFetchingLiveData.switchMap {
+            launchOnViewModelScope {
+                this.usersDataRepository.loadUserDataResponse {
+                    this.toastLiveData.postValue(it)
+                }
+            }
+        }
+    }
+
+    fun fetchUsersDataList() = this.usersDataFetchingLiveData.postValue(true)
+
+    fun insert(data : List<Data>) = viewModelScope.launch {
         usersDataRepository.insert(data)
     }
+
 }
