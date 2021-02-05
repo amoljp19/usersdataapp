@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">UsersDataApp</string>
     <string name="add_user">add_user</string>
+
+    <string name="hint_first_name">First Name…</string>
+    <string name="button_save">Save</string>
+    <string name="empty_not_saved">User not saved because it is empty.</string>
 </resources>

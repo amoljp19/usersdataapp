@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.softaai.usersdataapp">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".UsersDataApp"
@@ -12,6 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.UsersDataApp">
+        <activity android:name=".usersdata.ui.NewUserDataActivity" />
         <activity android:name=".usersdata.ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
