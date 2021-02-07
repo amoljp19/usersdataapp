@@ -16,6 +16,9 @@ import com.softaai.usersdataapp.usersdata.adapter.UsersListAdapter
 import com.softaai.usersdataapp.usersdata.viewmodel.UsersDataViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -33,9 +36,13 @@ class MainActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
+        usersDataViewModel.fetchUsersDataList()
+
         usersDataViewModel.UsersDataListLiveData.observe(this, Observer { users ->
             users?.let { adapter.submitList(it) }
         })
+
+
 
         val fab = findViewById<FloatingActionButton>(R.id.fab)
         fab.setOnClickListener {
@@ -48,9 +55,10 @@ class MainActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == newUserDataActivityRequestCode && resultCode == Activity.RESULT_OK) {
-            data?.getStringExtra(NewUserDataActivity.EXTRA_REPLY)?.let {
-                val user = Data(it, "amol@gmail.com", "Amol", 1, "Pawar")
-                usersDataViewModel.insert(listOf(user))
+            data?.extras?.let {
+
+                val user = Data(it.getString("img", ""), it.getString("email", ""), it.getString("firstName", ""), 13, it.getString("lastName", ""))
+                usersDataViewModel.insert(user)
             }
         } else {
             Toast.makeText(
@@ -59,4 +67,5 @@ class MainActivity : AppCompatActivity() {
                 Toast.LENGTH_LONG).show()
         }
     }
+
 }

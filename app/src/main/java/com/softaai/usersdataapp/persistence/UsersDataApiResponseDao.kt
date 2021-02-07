@@ -13,8 +13,11 @@ interface UsersDataApiResponseDao {
     @Query("SELECT * FROM Data ORDER BY firstName ASC")
     fun getAlphabetizedUsersData(): Flow<List<Data>>
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(data: List<Data>)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertUsersDataList(data: List<Data>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(data: Data)
 
     @Query("DELETE FROM Data")
     suspend fun deleteAll()

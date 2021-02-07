@@ -6,6 +6,8 @@ import com.softaai.usersdataapp.model.Data
 import com.softaai.usersdataapp.repository.UsersDataRepository
 import com.softaai.usersdataapp.usersdata.viewmodel.base.LiveCoroutinesViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -30,7 +32,7 @@ class UsersDataViewModel @Inject constructor(private val usersDataRepository: Us
 
     fun fetchUsersDataList() = this.usersDataFetchingLiveData.postValue(true)
 
-    fun insert(data : List<Data>) = viewModelScope.launch {
+    fun insert(data : Data) = viewModelScope.launch {
         usersDataRepository.insert(data)
     }
 

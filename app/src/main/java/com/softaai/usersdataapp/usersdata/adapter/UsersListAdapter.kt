@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.softaai.usersdataapp.R
 import com.softaai.usersdataapp.model.Data
 
@@ -18,14 +19,32 @@ class UsersListAdapter : ListAdapter<Data, UsersListAdapter.UsersDataViewHolder>
 
     override fun onBindViewHolder(holder: UsersDataViewHolder, position: Int) {
         val current = getItem(position)
-        holder.bind(current.firstName)
+        holder.bindAvtar(current.avatar)
+        holder.bindFirstName(current.firstName)
+        holder.bindLastName(current.lastName)
+        holder.bindEmail(current.email)
     }
 
     class UsersDataViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val userFirstNameItemView: TextView = itemView.findViewById(R.id.textView)
+        private val userFirstNameItemView: TextView = itemView.findViewById(R.id.firstNameTextView)
+        private val userLastNameItemView: TextView = itemView.findViewById(R.id.lastNameTextView)
+        private val userEmailItemView: TextView = itemView.findViewById(R.id.emailTextView)
 
-        fun bind(text: String?) {
+        fun bindAvtar(imageURL : String?){
+            Glide.with(itemView.context)
+                .load(imageURL)
+                .centerCrop()
+                .into(itemView.findViewById(R.id.imageview_account_profile))
+        }
+
+        fun bindFirstName(text: String?) {
             userFirstNameItemView.text = text
+        }
+        fun bindLastName(text: String?) {
+            userLastNameItemView.text = text
+        }
+        fun bindEmail(text: String?) {
+            userEmailItemView.text = text
         }
 
         companion object {

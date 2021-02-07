@@ -9,7 +9,7 @@ import com.softaai.usersdataapp.model.Data
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Database(entities = arrayOf(Data::class), version = 1, exportSchema = false)
+@Database(entities = arrayOf(Data::class), version = 1, exportSchema = true)
 abstract class UsersDataRoomDb : RoomDatabase() {
 
     abstract fun usersDataDao(): UsersDataApiResponseDao

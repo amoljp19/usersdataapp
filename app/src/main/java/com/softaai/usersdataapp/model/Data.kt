@@ -10,14 +10,14 @@ import com.squareup.moshi.JsonClass
 @Entity
 data class Data(
     @Json(name = "avatar")
-    val avatar: String,
+    var avatar: String,
     @Json(name = "email")
-    val email: String,
+    var email: String,
     @Json(name = "first_name")
-    val firstName: String,
+    var firstName: String,
     @field:PrimaryKey
     @Json(name = "id")
     val id: Int,
     @Json(name = "last_name")
-    val lastName: String
+    var lastName: String
 )

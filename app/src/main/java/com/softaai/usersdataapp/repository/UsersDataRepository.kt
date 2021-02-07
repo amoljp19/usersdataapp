@@ -22,17 +22,16 @@ class UsersDataRepository @Inject constructor(private val usersDataApiClient: Us
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
-    suspend fun insert(data: List<Data>) {
-        usersDataDao.insert(data)
+    suspend fun insert(data: Data) {
+        usersDataDao.insertUsersDataList(listOf(data))
     }
-
 
     suspend fun loadUserDataResponse(error: (String) -> Unit) = withContext(Dispatchers.IO) {
         val liveData = MutableLiveData<List<Data>>()
 
         var allUsers = usersDataDao.getAlphabetizedUsersData().asLiveData().value
 
-        if (allUsers!!.isEmpty()) {
+        if (allUsers.isNullOrEmpty() == true) {
             usersDataApiClient.fetchUsersData { response ->
                 when (response) {
                     is ApiResponse.Success -> {
@@ -40,7 +39,7 @@ class UsersDataRepository @Inject constructor(private val usersDataApiClient: Us
                             allUsers = it!!.data
                             liveData.postValue(it.data)
                             GlobalScope.launch{
-                                usersDataDao.insert(it.data)
+                                usersDataDao.insertUsersDataList(it.data)
                             }
                         }
                     }
