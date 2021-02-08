@@ -18,7 +18,8 @@ import javax.inject.Inject
 class UsersDataRepository @Inject constructor(private val usersDataApiClient: UsersDataApiClient, private val usersDataDao: UsersDataApiResponseDao) {
 
 
-    val allUsers: Flow<List<Data>> = usersDataDao.getAlphabetizedUsersData()
+    val allUsersData: Flow<List<Data>> = usersDataDao.getAlphabetizedUsersData()
+    var allUsers : List<Data>? = null
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
@@ -29,10 +30,10 @@ class UsersDataRepository @Inject constructor(private val usersDataApiClient: Us
     suspend fun loadUserDataResponse(error: (String) -> Unit) = withContext(Dispatchers.IO) {
         val liveData = MutableLiveData<List<Data>>()
 
-        var allUsers = usersDataDao.getAlphabetizedUsersData().asLiveData().value
+        allUsers = usersDataDao.getAlphabetizedUsersData().asLiveData().value
 
         if (allUsers.isNullOrEmpty() == true) {
-            usersDataApiClient.fetchUsersData { response ->
+            usersDataApiClient.fetchUsersData() { response ->
                 when (response) {
                     is ApiResponse.Success -> {
                         response.data.let {
@@ -48,6 +49,27 @@ class UsersDataRepository @Inject constructor(private val usersDataApiClient: Us
                 }
             }
         }
+        liveData.apply { postValue(allUsers) }
+    }
+
+    suspend fun loadMoreUserDataResponse(pageNo:String, error: (String) -> Unit) = withContext(Dispatchers.IO) {
+
+        val liveData = MutableLiveData<List<Data>>()
+        usersDataApiClient.fetchMoreUsersData(pageNo){ response ->
+                when (response) {
+                    is ApiResponse.Success -> {
+                        response.data.let {
+                            allUsers = it!!.data
+                            liveData.postValue(it.data)
+                            GlobalScope.launch{
+                                usersDataDao.insertUsersDataList(it.data)
+                            }
+                        }
+                    }
+                    is ApiResponse.Failure.Error -> error(response.message())
+                    is ApiResponse.Failure.Exception -> error(response.message())
+                }
+            }
         liveData.apply { postValue(allUsers) }
     }
 }

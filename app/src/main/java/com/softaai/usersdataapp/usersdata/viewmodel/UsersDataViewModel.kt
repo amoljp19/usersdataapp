@@ -15,7 +15,7 @@ import javax.inject.Inject
 class UsersDataViewModel @Inject constructor(private val usersDataRepository: UsersDataRepository) : LiveCoroutinesViewModel() {
 
     private var usersDataFetchingLiveData: MutableLiveData<Boolean> = MutableLiveData()
-    val UsersDataListLiveData: LiveData<List<Data>>
+    var UsersDataListLiveData: LiveData<List<Data>>
 
     val toastLiveData: MutableLiveData<String> = MutableLiveData()
 
@@ -34,6 +34,16 @@ class UsersDataViewModel @Inject constructor(private val usersDataRepository: Us
 
     fun insert(data : Data) = viewModelScope.launch {
         usersDataRepository.insert(data)
+    }
+
+    fun loadMoreUserData(){
+        UsersDataListLiveData = this.usersDataFetchingLiveData.switchMap {
+            launchOnViewModelScope {
+                this.usersDataRepository.loadMoreUserDataResponse("2") {
+                    this.toastLiveData.postValue(it)
+                }
+            }
+        }
     }
 
 }
