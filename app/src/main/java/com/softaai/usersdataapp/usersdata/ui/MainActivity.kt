@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity() {
 
         adapter.addLoadingView()
 
-        loadMoreItemsCells = ArrayList<Data?>()
+        //loadMoreItemsCells = ArrayList<Data?>()
 
         val start = adapter.itemCount
 

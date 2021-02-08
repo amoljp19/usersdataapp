@@ -39,7 +39,7 @@ class UsersDataViewModel @Inject constructor(private val usersDataRepository: Us
     fun loadMoreUserData() {
         UsersDataListLiveData = this.usersDataFetchingLiveData.switchMap {
             launchOnViewModelScope {
-                this.usersDataRepository.loadMoreUserDataResponse("2") {
+                this.usersDataRepository.loadMoreUserDataResponse(2.toString()) {
                     this.toastLiveData.postValue(it)
                 }
             }
