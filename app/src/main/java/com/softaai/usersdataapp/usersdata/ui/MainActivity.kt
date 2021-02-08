@@ -2,11 +2,11 @@ package com.softaai.usersdataapp.usersdata.ui
 
 import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,25 +16,20 @@ import com.softaai.usersdataapp.model.Data
 import com.softaai.usersdataapp.usersdata.adapter.Items_RVAdapter
 import com.softaai.usersdataapp.usersdata.adapter.OnLoadMoreListener
 import com.softaai.usersdataapp.usersdata.adapter.RecyclerViewLoadMoreScroll
-import com.softaai.usersdataapp.usersdata.adapter.UsersListAdapter
 import com.softaai.usersdataapp.usersdata.viewmodel.UsersDataViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private val usersDataViewModel : UsersDataViewModel by viewModels()
+    private val usersDataViewModel: UsersDataViewModel by viewModels()
 
     private val newUserDataActivityRequestCode = 1
 
-    lateinit var loadMoreItemsCells: ArrayList<Data>
+    lateinit var loadMoreItemsCells: ArrayList<Data?>
     lateinit var adapter: Items_RVAdapter
     lateinit var scrollListener: RecyclerViewLoadMoreScroll
-    lateinit var mLayoutManager:RecyclerView.LayoutManager
+    lateinit var mLayoutManager: RecyclerView.LayoutManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,15 +43,14 @@ class MainActivity : AppCompatActivity() {
         setRVScrollListener()
 
         usersDataViewModel.fetchUsersDataList()
-
         usersDataViewModel.UsersDataListLiveData.observe(this, Observer { users ->
             users?.let {
-                loadMoreItemsCells = it as ArrayList<Data>
+                loadMoreItemsCells = it as ArrayList<Data?>
                 adapter = Items_RVAdapter(loadMoreItemsCells)
                 recyclerView.adapter = adapter
-                adapter.addData(loadMoreItemsCells) }
+                adapter.addData(loadMoreItemsCells)
+            }
         })
-
 
 
         val fab = findViewById<FloatingActionButton>(R.id.fab)
@@ -70,11 +64,11 @@ class MainActivity : AppCompatActivity() {
 
         adapter.addLoadingView()
 
-//        loadMoreItemsCells = ArrayList()
+        loadMoreItemsCells = ArrayList<Data?>()
 
         val start = adapter.itemCount
 
-        val end = start + 10
+        val end = start + 5
 
         Handler().postDelayed({
             usersDataViewModel.loadMoreUserData()
@@ -94,7 +88,7 @@ class MainActivity : AppCompatActivity() {
         findViewById<RecyclerView>(R.id.recyclerview).setHasFixedSize(true)
     }
 
-    private  fun setRVScrollListener() {
+    private fun setRVScrollListener() {
         mLayoutManager = LinearLayoutManager(this)
         scrollListener = RecyclerViewLoadMoreScroll(mLayoutManager as LinearLayoutManager)
         scrollListener.setOnLoadMoreListener(object : OnLoadMoreListener {
@@ -117,9 +111,9 @@ class MainActivity : AppCompatActivity() {
             }
         } else {
             Toast.makeText(
-                applicationContext,
-                R.string.empty_not_saved,
-                Toast.LENGTH_LONG).show()
+                    applicationContext,
+                    R.string.empty_not_saved,
+                    Toast.LENGTH_LONG).show()
         }
     }
 

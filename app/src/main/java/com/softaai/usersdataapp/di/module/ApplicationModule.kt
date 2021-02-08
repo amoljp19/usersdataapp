@@ -33,23 +33,26 @@ class ApplicationModule {
     @Provides
     @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient, BASE_URL: String): Retrofit =
-            Retrofit.Builder()
-                    .addConverterFactory(MoshiConverterFactory.create())
-                    .baseUrl(BASE_URL)
-                    .client(okHttpClient)
-                    .build()
+        Retrofit.Builder()
+            .addConverterFactory(MoshiConverterFactory.create())
+            .baseUrl(BASE_URL)
+            .client(okHttpClient)
+            .build()
 
     @Provides
     @Singleton
-    fun provideApiService(retrofit: Retrofit): UsersDataApiService = retrofit.create(UsersDataApiService::class.java)
+    fun provideApiService(retrofit: Retrofit): UsersDataApiService =
+        retrofit.create(UsersDataApiService::class.java)
 
     @Provides
     @Singleton
-    fun provideApiClient(usersDataApiService: UsersDataApiService): UsersDataApiClient = UsersDataApiClient(usersDataApiService)
+    fun provideApiClient(usersDataApiService: UsersDataApiService): UsersDataApiClient =
+        UsersDataApiClient(usersDataApiService)
 
     @Singleton
     @Provides
-    fun provideDatabase(@ApplicationContext appContext: Context): UsersDataRoomDb = UsersDataRoomDb.getUsersDatabase(appContext)
+    fun provideDatabase(@ApplicationContext appContext: Context): UsersDataRoomDb =
+        UsersDataRoomDb.getUsersDatabase(appContext)
 
     @Singleton
     @Provides
@@ -57,6 +60,9 @@ class ApplicationModule {
 
     @Singleton
     @Provides
-    fun provideUserDataRepository(usersDataApiClient: UsersDataApiClient, usersDataApiResponseDao: UsersDataApiResponseDao) =
-            UsersDataRepository(usersDataApiClient, usersDataApiResponseDao)
+    fun provideUserDataRepository(
+        usersDataApiClient: UsersDataApiClient,
+        usersDataApiResponseDao: UsersDataApiResponseDao
+    ) =
+        UsersDataRepository(usersDataApiClient, usersDataApiResponseDao)
 }

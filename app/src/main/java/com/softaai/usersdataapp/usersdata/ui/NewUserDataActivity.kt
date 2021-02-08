@@ -27,12 +27,13 @@ class NewUserDataActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(
-                this, R.layout.users_data_edit_activity)
+            this, R.layout.users_data_edit_activity
+        )
 
         binding.floatingActionButton.setOnClickListener {
 
             if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                 requestPermissions(arrayOf(Manifest.permission.CAMERA), MY_CAMERA_PERMISSION_CODE)
+                requestPermissions(arrayOf(Manifest.permission.CAMERA), MY_CAMERA_PERMISSION_CODE)
             } else {
                 val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                 startActivityForResult(cameraIntent, CAMERA_REQUEST)
@@ -43,7 +44,10 @@ class NewUserDataActivity : AppCompatActivity() {
         binding.buttonSave.setOnClickListener {
             val replyIntent = Intent()
             val bundle = Bundle()
-            if (TextUtils.isEmpty(binding.firstNameEditText.text) || TextUtils.isEmpty(binding.lastNameEditText.text) || TextUtils.isEmpty(binding.emailIdEditText.text)) {
+            if (TextUtils.isEmpty(binding.firstNameEditText.text) || TextUtils.isEmpty(binding.lastNameEditText.text) || TextUtils.isEmpty(
+                    binding.emailIdEditText.text
+                )
+            ) {
                 setResult(Activity.RESULT_CANCELED, replyIntent)
             } else {
                 bundle.putString("firstName", binding.firstNameEditText.text.toString())
@@ -59,7 +63,11 @@ class NewUserDataActivity : AppCompatActivity() {
 
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String?>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String?>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == MY_CAMERA_PERMISSION_CODE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {

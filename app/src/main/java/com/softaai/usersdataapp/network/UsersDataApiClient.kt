@@ -9,7 +9,10 @@ class UsersDataApiClient @Inject constructor(private val usersDataApiService: Us
         this.usersDataApiService.fetchUsersData().transform(onResult)
     }
 
-    fun fetchMoreUsersData(pageNo: String, onResult: (response: ApiResponse<UsersDataApiResponse>) -> Unit) {
+    fun fetchMoreUsersData(
+        pageNo: String,
+        onResult: (response: ApiResponse<UsersDataApiResponse>) -> Unit
+    ) {
         this.usersDataApiService.fetchUsersData(pageNo).transform(onResult)
     }
 }

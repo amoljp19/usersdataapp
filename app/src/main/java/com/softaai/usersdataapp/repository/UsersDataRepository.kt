@@ -15,11 +15,14 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class UsersDataRepository @Inject constructor(private val usersDataApiClient: UsersDataApiClient, private val usersDataDao: UsersDataApiResponseDao) {
+class UsersDataRepository @Inject constructor(
+    private val usersDataApiClient: UsersDataApiClient,
+    private val usersDataDao: UsersDataApiResponseDao
+) {
 
 
     val allUsersData: Flow<List<Data>> = usersDataDao.getAlphabetizedUsersData()
-    var allUsers : List<Data>? = null
+    var allUsers: List<Data>? = null
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
@@ -39,7 +42,7 @@ class UsersDataRepository @Inject constructor(private val usersDataApiClient: Us
                         response.data.let {
                             allUsers = it!!.data
                             liveData.postValue(it.data)
-                            GlobalScope.launch{
+                            GlobalScope.launch {
                                 usersDataDao.insertUsersDataList(it.data)
                             }
                         }
@@ -52,16 +55,17 @@ class UsersDataRepository @Inject constructor(private val usersDataApiClient: Us
         liveData.apply { postValue(allUsers) }
     }
 
-    suspend fun loadMoreUserDataResponse(pageNo:String, error: (String) -> Unit) = withContext(Dispatchers.IO) {
+    suspend fun loadMoreUserDataResponse(pageNo: String, error: (String) -> Unit) =
+        withContext(Dispatchers.IO) {
 
-        val liveData = MutableLiveData<List<Data>>()
-        usersDataApiClient.fetchMoreUsersData(pageNo){ response ->
+            val liveData = MutableLiveData<List<Data>>()
+            usersDataApiClient.fetchMoreUsersData(pageNo) { response ->
                 when (response) {
                     is ApiResponse.Success -> {
                         response.data.let {
                             allUsers = it!!.data
                             liveData.postValue(it.data)
-                            GlobalScope.launch{
+                            GlobalScope.launch {
                                 usersDataDao.insertUsersDataList(it.data)
                             }
                         }
@@ -70,6 +74,6 @@ class UsersDataRepository @Inject constructor(private val usersDataApiClient: Us
                     is ApiResponse.Failure.Exception -> error(response.message())
                 }
             }
-        liveData.apply { postValue(allUsers) }
-    }
+            liveData.apply { postValue(allUsers) }
+        }
 }

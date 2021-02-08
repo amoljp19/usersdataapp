@@ -11,7 +11,8 @@ import com.bumptech.glide.Glide
 import com.softaai.usersdataapp.R
 import com.softaai.usersdataapp.model.Data
 
-class UsersListAdapter : ListAdapter<Data, UsersListAdapter.UsersDataViewHolder>(UsersDataComparator()) {
+class UsersListAdapter :
+    ListAdapter<Data, UsersListAdapter.UsersDataViewHolder>(UsersDataComparator()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UsersDataViewHolder {
         return UsersDataViewHolder.create(parent)
@@ -30,7 +31,7 @@ class UsersListAdapter : ListAdapter<Data, UsersListAdapter.UsersDataViewHolder>
         private val userLastNameItemView: TextView = itemView.findViewById(R.id.lastNameTextView)
         private val userEmailItemView: TextView = itemView.findViewById(R.id.emailTextView)
 
-        fun bindAvtar(imageURL : String?){
+        fun bindAvtar(imageURL: String?) {
             Glide.with(itemView.context)
                 .load(imageURL)
                 .centerCrop()
@@ -40,9 +41,11 @@ class UsersListAdapter : ListAdapter<Data, UsersListAdapter.UsersDataViewHolder>
         fun bindFirstName(text: String?) {
             userFirstNameItemView.text = text
         }
+
         fun bindLastName(text: String?) {
             userLastNameItemView.text = text
         }
+
         fun bindEmail(text: String?) {
             userEmailItemView.text = text
         }
@@ -50,7 +53,7 @@ class UsersListAdapter : ListAdapter<Data, UsersListAdapter.UsersDataViewHolder>
         companion object {
             fun create(parent: ViewGroup): UsersDataViewHolder {
                 val view: View = LayoutInflater.from(parent.context)
-                        .inflate(R.layout.recyclerview_item, parent, false)
+                    .inflate(R.layout.recyclerview_item, parent, false)
                 return UsersDataViewHolder(view)
             }
         }
